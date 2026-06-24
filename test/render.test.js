@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
-const { relativeDate, renderActivityItems, replaceActivityItems } = require("../src/render");
+const { activityDate, renderActivityItems, replaceActivityItems } = require("../src/render");
 
 test("renderActivityItems writes supported activity info", () => {
   const yaml = renderActivityItems([
@@ -12,7 +12,7 @@ test("renderActivityItems writes supported activity info", () => {
         title: "Add activity log",
         url: "https://github.com/hugo-themes/nerdy/pull/7",
       },
-      timestamp: new Date().toISOString(),
+      timestamp: "2026-06-24T15:30:00Z",
       type: "merged-pr",
     },
     {
@@ -21,15 +21,17 @@ test("renderActivityItems writes supported activity info", () => {
         owner: "hugo-themes",
         url: "https://github.com/hugo-themes/nerdy",
       },
-      timestamp: new Date().toISOString(),
+      timestamp: "2026-06-21T00:00:00Z",
       type: "repo-created",
     },
   ]);
 
   assert.match(yaml, /^items:/);
-  assert.match(yaml, /active: true/);
+  assert.match(yaml, /activityDate: 2026-06-24/);
+  assert.doesNotMatch(yaml, /active: true/);
   assert.match(yaml, /type: "merged-pr"/);
   assert.match(yaml, /number: 7/);
+  assert.match(yaml, /activityDate: 2026-06-21/);
   assert.match(yaml, /type: "repo-created"/);
   assert.match(yaml, /name: "hugo-themes\/nerdy"/);
 });
@@ -63,6 +65,7 @@ test("replaceActivityItems preserves metadata around the top-level items section
   );
 
   assert.match(updated, /^id: activity-logs\ntype: activity\nicon: clock\ntitle: Activity Log\nitems:/);
+  assert.match(updated, /activityDate:/);
   assert.match(updated, /type: "release"/);
   assert.match(updated, /footer: keep-me\n$/);
   assert.doesNotMatch(updated, /Old/);
@@ -72,10 +75,8 @@ test("replaceActivityItems requires an existing top-level items section", () => 
   assert.throws(() => replaceActivityItems("id: activity-logs\n", []), /top-level items section/);
 });
 
-test("relativeDate formats nearby dates", () => {
-  const now = new Date("2026-06-24T12:00:00Z");
-
-  assert.equal(relativeDate("2026-06-24T01:00:00Z", now), "Today");
-  assert.equal(relativeDate("2026-06-23T23:00:00Z", now), "Yesterday");
-  assert.equal(relativeDate("2026-06-20T00:00:00Z", now), "4 Days Ago");
+test("activityDate formats timestamps as UTC dates", () => {
+  assert.equal(activityDate("2026-06-24T23:30:00Z"), "2026-06-24");
+  assert.equal(activityDate("2026-06-24"), "2026-06-24");
+  assert.throws(() => activityDate("not-a-date"), /valid date/);
 });

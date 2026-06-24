@@ -5,9 +5,8 @@ function renderActivityItems(activities) {
 
   const lines = ["items:"];
 
-  activities.forEach((activity, index) => {
-    lines.push(`  - date: ${yamlString(relativeDate(activity.timestamp))}`);
-    if (index === 0) lines.push("    active: true");
+  activities.forEach((activity) => {
+    lines.push(`  - activityDate: ${activityDate(activity.timestamp)}`);
     lines.push(`    type: ${yamlString(activity.type)}`);
     lines.push("    info:");
 
@@ -66,25 +65,14 @@ function renderValue(value) {
   return yamlString(value);
 }
 
-function relativeDate(timestamp, now = new Date()) {
-  const activityDate = new Date(timestamp);
-  const rawDiffDays = Math.floor((startOfUtcDay(now) - startOfUtcDay(activityDate)) / (24 * 60 * 60 * 1000));
-  const diffDays = Math.max(0, rawDiffDays);
+function activityDate(timestamp) {
+  const date = new Date(timestamp);
 
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 30) return `${diffDays} Days Ago`;
+  if (!Number.isFinite(date.getTime())) {
+    throw new Error(`Activity timestamp must be a valid date: ${timestamp}`);
+  }
 
-  return new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    month: "short",
-    timeZone: "UTC",
-    year: "numeric",
-  }).format(activityDate);
-}
-
-function startOfUtcDay(date) {
-  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  return date.toISOString().slice(0, 10);
 }
 
 function yamlString(value) {
@@ -92,7 +80,7 @@ function yamlString(value) {
 }
 
 module.exports = {
-  relativeDate,
+  activityDate,
   renderActivityItems,
   replaceActivityItems,
 };

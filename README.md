@@ -91,22 +91,28 @@ want in the generated log:
 
 The output file must already exist and contain a top-level `items` section. The
 action replaces only that `items` section and leaves the rest of the file as-is.
+Generated items use Nerdy's `activityDate` field in `YYYY-MM-DD` format; Nerdy
+formats the display label, groups same-day activity, and highlights the newest
+visible activity group.
 
 ```yaml
 id: "activity-logs"
 type: "activity"
 icon: "clock"
 title: "Activity Log"
+activityLimit: 20
+lookbackDays: 15
+includePosts: true
+postSection: "posts"
 items:
-  - date: "Today"
-    active: true
+  - activityDate: 2026-06-24
     type: "merged-pr"
     info:
       number: 42
       repo: "https://github.com/hugo-themes/nerdy"
       title: "Improve activity section"
       url: "https://github.com/hugo-themes/nerdy/pull/42"
-  - date: "Yesterday"
+  - activityDate: 2026-06-23
     type: "release"
     info:
       repo: "https://github.com/hugo-themes/nerdy"
