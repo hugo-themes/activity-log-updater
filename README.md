@@ -18,7 +18,7 @@ name: Update activity log
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 3 * * *"
+    - cron: "0 6 * * *"
 
 permissions:
   contents: write
