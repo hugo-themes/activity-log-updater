@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: hugo-themes/activity-log-updater@v1
+      - uses: hugo-themes/activity-log-updater@v1.0.0
         with:
           github-user: hossainemruz
           organizations: hugo-themes
@@ -46,7 +46,7 @@ Each activity type is disabled by default. Enable exactly the activity types you
 want in the generated log:
 
 ```yaml
-- uses: hugo-themes/activity-log-updater@v1
+- uses: hugo-themes/activity-log-updater@v1.0.0
   with:
     github-user: hossainemruz
     organizations: |
@@ -60,32 +60,32 @@ want in the generated log:
 
 ## Inputs
 
-| Input | Default | Description |
-| --- | --- | --- |
-| `github-token` | `${{ github.token }}` | Token used to read GitHub activity and push commits. |
-| `github-user` | `${{ github.repository_owner }}` | User whose authored pull request activity is tracked. |
-| `organizations` | empty | Comma, space, or newline-separated organization logins to include. |
-| `lookback-days` | `7` | Number of days of activity to include. |
-| `activity-limit` | `15` | Maximum number of activities to write. |
-| `include-opened-pr` | `false` | Include pull requests opened by `github-user`. |
-| `include-merged-pr` | `false` | Include pull requests authored by `github-user` that were merged. |
-| `include-repo-created` | `false` | Include public repositories created by `github-user` or listed organizations. |
-| `include-releases` | `false` | Include public releases from repositories owned by `github-user` or listed organizations. |
-| `output-file` | `data/home/activity-logs.yaml` | Existing YAML file whose top-level `items` section will be replaced. |
-| `commit` | `true` | Commit the updated output file when it changes. |
-| `push` | `true` | Push the commit back to the workflow ref when `commit` is enabled. |
-| `repository-limit` | `100` | Advanced: repositories inspected per owner. Maximum `1000`. |
-| `pull-request-limit` | `100` | Advanced: authored pull requests inspected for `github-user`. Maximum `1000`. |
-| `release-limit` | `10` | Advanced: releases inspected per repository. Maximum `100`. |
+| Input                  | Default                          | Description                                                                               |
+| ---------------------- | -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `github-token`         | `${{ github.token }}`            | Token used to read GitHub activity and push commits.                                      |
+| `github-user`          | `${{ github.repository_owner }}` | User whose authored pull request activity is tracked.                                     |
+| `organizations`        | empty                            | Comma, space, or newline-separated organization logins to include.                        |
+| `lookback-days`        | `7`                              | Number of days of activity to include.                                                    |
+| `activity-limit`       | `15`                             | Maximum number of activities to write.                                                    |
+| `include-opened-pr`    | `false`                          | Include pull requests opened by `github-user`.                                            |
+| `include-merged-pr`    | `false`                          | Include pull requests authored by `github-user` that were merged.                         |
+| `include-repo-created` | `false`                          | Include public repositories created by `github-user` or listed organizations.             |
+| `include-releases`     | `false`                          | Include public releases from repositories owned by `github-user` or listed organizations. |
+| `output-file`          | `data/home/activity-logs.yaml`   | Existing YAML file whose top-level `items` section will be replaced.                      |
+| `commit`               | `true`                           | Commit the updated output file when it changes.                                           |
+| `push`                 | `true`                           | Push the commit back to the workflow ref when `commit` is enabled.                        |
+| `repository-limit`     | `100`                            | Advanced: repositories inspected per owner. Maximum `1000`.                               |
+| `pull-request-limit`   | `100`                            | Advanced: authored pull requests inspected for `github-user`. Maximum `1000`.             |
+| `release-limit`        | `10`                             | Advanced: releases inspected per repository. Maximum `100`.                               |
 
 ## Outputs
 
-| Output | Description |
-| --- | --- |
+| Output           | Description                                    |
+| ---------------- | ---------------------------------------------- |
 | `activity-count` | Number of activities written to the YAML file. |
-| `changed` | Whether the output file content changed. |
-| `committed` | Whether the action created a git commit. |
-| `output-file` | Path to the updated YAML file. |
+| `changed`        | Whether the output file content changed.       |
+| `committed`      | Whether the action created a git commit.       |
+| `output-file`    | Path to the updated YAML file.                 |
 
 ## Output file format
 
