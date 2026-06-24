@@ -27,7 +27,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: hugo-themes/activity-log-updater@v1.0.0
         with:
