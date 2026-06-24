@@ -1,0 +1,83 @@
+name: Activity Log Updater
+description: Generate a YAML activity log from GitHub pull requests, releases, and repositories.
+author: Hugo Themes
+
+branding:
+  icon: clock
+  color: blue
+
+inputs:
+  github-token:
+    description: Token used to read GitHub activity and push commits.
+    required: false
+    default: ${{ github.token }}
+  github-user:
+    description: GitHub user whose authored pull request activity should be tracked. Defaults to the repository owner.
+    required: false
+    default: ${{ github.repository_owner }}
+  organizations:
+    description: Comma, space, or newline-separated organization logins to include.
+    required: false
+    default: ""
+  lookback-days:
+    description: Number of days of activity to include.
+    required: false
+    default: "7"
+  activity-limit:
+    description: Maximum number of activities to write.
+    required: false
+    default: "15"
+  include-opened-pr:
+    description: Include pull requests opened by github-user in the selected owner repositories.
+    required: false
+    default: "false"
+  include-merged-pr:
+    description: Include pull requests authored by github-user that were merged in the selected owner repositories.
+    required: false
+    default: "false"
+  include-repo-created:
+    description: Include public repositories created under github-user or the selected organizations.
+    required: false
+    default: "false"
+  include-releases:
+    description: Include public releases from repositories owned by github-user or the selected organizations.
+    required: false
+    default: "false"
+  output-file:
+    description: Existing YAML file whose top-level items section will be replaced.
+    required: false
+    default: data/home/activity-logs.yaml
+  commit:
+    description: Commit the updated output file when it changes.
+    required: false
+    default: "true"
+  push:
+    description: Push the commit back to the workflow ref when commit is enabled.
+    required: false
+    default: "true"
+  repository-limit:
+    description: Advanced. Number of repositories to inspect per user or organization. Maximum 1000.
+    required: false
+    default: "100"
+  pull-request-limit:
+    description: Advanced. Number of authored pull requests to inspect for github-user. Maximum 1000.
+    required: false
+    default: "100"
+  release-limit:
+    description: Advanced. Number of releases to inspect per repository. Maximum 100.
+    required: false
+    default: "10"
+
+outputs:
+  activity-count:
+    description: Number of activities written to the YAML file.
+  changed:
+    description: Whether the output file content changed.
+  committed:
+    description: Whether the action created a git commit.
+  output-file:
+    description: Path to the updated YAML file.
+
+runs:
+  using: node24
+  main: src/index.js
